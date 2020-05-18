@@ -29,9 +29,9 @@ namespace Painter
         private Color32 copyPasteColor;
         internal ushort BuildingID;
         internal bool IsPanelVisible;
-        private string CopyText => UserMod.Translation.GetTranslation("PAINTER-COPY");
-        private string PasteText => UserMod.Translation.GetTranslation("PAINTER-PASTE");
-        private string ResetText => UserMod.Translation.GetTranslation("PAINTER-RESET");
+        private string CopyText => RepaintMod.Translation.GetTranslation("PAINTER-COPY");
+        private string PasteText => RepaintMod.Translation.GetTranslation("PAINTER-PASTE");
+        private string ResetText => RepaintMod.Translation.GetTranslation("PAINTER-RESET");
                 
         private void Update()
         {

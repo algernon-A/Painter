@@ -24,7 +24,7 @@ namespace Painter.TranslationFramework
                     try
                     {
                         var instances = item.GetInstances<IUserMod>();
-                        if (!(instances.FirstOrDefault() is UserMod))
+                        if (!(instances.FirstOrDefault() is RepaintMod))
                             continue;
 
                         return item;

@@ -1,6 +1,7 @@
-﻿using Harmony;
-using System.Reflection;
+﻿using System.Reflection;
 using UnityEngine;
+using HarmonyLib;
+
 
 namespace Painter
 {
