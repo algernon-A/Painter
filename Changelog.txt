@@ -1,3 +1,6 @@
+- Added Korean translations by TwotoolusFLY LSh.st 
+
+
 Version 1.0
 
 - Migrate to Harmony 2.0

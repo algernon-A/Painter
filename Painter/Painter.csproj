@@ -91,6 +91,7 @@
     <Content Include="Locale\english.xml" />
     <Content Include="Locale\french.xml" />
     <Content Include="Locale\italian.xml" />
+    <Content Include="Locale\korean.xml" />
     <Content Include="Locale\spanish.xml" />
     <Content Include="Locale\swedish.xml" />
   </ItemGroup>
