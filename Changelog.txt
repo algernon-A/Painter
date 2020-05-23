@@ -1,3 +1,4 @@
+- Adjust colour icon position on service building panels
 - Added Korean translations by TwotoolusFLY LSh.st 
 
 

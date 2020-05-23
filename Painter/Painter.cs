@@ -93,13 +93,13 @@ namespace Painter
             };
             ColorFields = new Dictionary<PanelType, UIColorField>
             {
-                [PanelType.Service] = CreateColorField(Panels[PanelType.Service]?.component),
-                [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component),
-                [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component),
+                [PanelType.Service] = CreateColorField(Panels[PanelType.Service]?.component, 80f),
+                [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component, 43f),
+                [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component, 43f),
             };
         }
 
-        private UIColorField CreateColorField(UIComponent parent)
+        private UIColorField CreateColorField(UIComponent parent, float yPos)
         {
             if (colorFIeldTemplate == null)
             {
@@ -114,7 +114,7 @@ namespace Painter
             parent.AttachUIComponent(cF.gameObject);
             cF.name = "PainterColorField";
             cF.AlignTo(parent, UIAlignAnchor.TopRight);
-            cF.relativePosition += new Vector3(-40f, 43f, 0f);
+            cF.relativePosition += new Vector3(-40f, yPos, 0f);
             cF.size = new Vector2(26f, 26f);
             cF.pickerPosition = UIColorField.ColorPickerPosition.RightBelow;
             cF.eventSelectedColorChanged += EventSelectedColorChangedHandler;
