@@ -87,9 +87,9 @@ namespace Painter
         {
             Panels = new Dictionary<PanelType, BuildingWorldInfoPanel>
             {
-                [PanelType.Service] = GameObject.Find("(Library) CityServiceWorldInfoPanel")?.GetComponent<CityServiceWorldInfoPanel>(),
-                [PanelType.Shelter] = GameObject.Find("(Library) ShelterWorldInfoPanel")?.GetComponent<ShelterWorldInfoPanel>(),
-                [PanelType.Zoned] = GameObject.Find("(Library) ZonedBuildingWorldInfoPanel")?.GetComponent<ZonedBuildingWorldInfoPanel>()
+                [PanelType.Service] = UIView.library.Get<CityServiceWorldInfoPanel>(typeof(CityServiceWorldInfoPanel).Name),
+                [PanelType.Shelter] = UIView.library.Get<ShelterWorldInfoPanel>(typeof(ShelterWorldInfoPanel).Name),
+                [PanelType.Zoned] = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)
             };
             ColorFields = new Dictionary<PanelType, UIColorField>
             {
@@ -114,7 +114,7 @@ namespace Painter
             parent.AttachUIComponent(cF.gameObject);
 
             // Find ProblemsPanel relative position to position ColorField correctly.
-            // We'll use 40f as a default relative Y in case something doesn't work.
+            // We'll use 43f as a default relative Y in case something doesn't work.
             UIComponent problemsPanel;
             float relativeY = 43f;
 
@@ -137,7 +137,7 @@ namespace Painter
             catch
             {
                 // Don't care; just use default relative Y.
-                Debug.Log("Repaint: couldn't find problemsPanel relative position.");
+                Debug.Log("Repaint: couldn't find ProblemsPanel relative position.");
             }
 
             cF.name = "PainterColorField";
