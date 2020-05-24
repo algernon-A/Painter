@@ -93,13 +93,13 @@ namespace Painter
             };
             ColorFields = new Dictionary<PanelType, UIColorField>
             {
-                [PanelType.Service] = CreateColorField(Panels[PanelType.Service]?.component, 80f),
-                [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component, 43f),
-                [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component, 43f),
+                [PanelType.Service] = CreateColorField(Panels[PanelType.Service]?.component),
+                [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component),
+                [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component),
             };
         }
 
-        private UIColorField CreateColorField(UIComponent parent, float yPos)
+        private UIColorField CreateColorField(UIComponent parent)
         {
             if (colorFIeldTemplate == null)
             {
@@ -112,9 +112,37 @@ namespace Painter
 
             UIColorField cF = Instantiate(colorFIeldTemplate.gameObject).GetComponent<UIColorField>();
             parent.AttachUIComponent(cF.gameObject);
+
+            // Find ProblemsPanel relative position to position ColorField correctly.
+            // We'll use 40f as a default relative Y in case something doesn't work.
+            UIComponent problemsPanel;
+            float relativeY = 43f;
+
+            // Player info panels have wrappers, zoned ones don't.
+            UIComponent wrapper = parent.Find("Wrapper");
+            if (wrapper == null)
+            {
+                problemsPanel = parent.Find("ProblemsPanel");
+            }
+            else
+            {
+                problemsPanel = wrapper.Find("ProblemsPanel");
+            }
+
+            try
+            {
+                // Position ColorField vertically in the middle of the problems panel.  If wrapper panel exists, we need to add its offset as well.
+                relativeY = (wrapper == null ? 0 : wrapper.relativePosition.y) + problemsPanel.relativePosition.y + ((problemsPanel.height - 26) / 2);
+            }
+            catch
+            {
+                // Don't care; just use default relative Y.
+                Debug.Log("Repaint: couldn't find problemsPanel relative position.");
+            }
+
             cF.name = "PainterColorField";
             cF.AlignTo(parent, UIAlignAnchor.TopRight);
-            cF.relativePosition += new Vector3(-40f, yPos, 0f);
+            cF.relativePosition += new Vector3(-40f, relativeY, 0f);
             cF.size = new Vector2(26f, 26f);
             cF.pickerPosition = UIColorField.ColorPickerPosition.RightBelow;
             cF.eventSelectedColorChanged += EventSelectedColorChangedHandler;
