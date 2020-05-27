@@ -1,5 +1,7 @@
+Version 1.0.1
+
 - Adjust colour icon position on service building panels
-- Added Korean translations by TwotoolusFLY LSh.st 
+- Added Korean translations by  TwotoolusFLY BAUST 
 
 
 Version 1.0

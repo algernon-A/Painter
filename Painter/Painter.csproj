@@ -94,6 +94,7 @@
     <Content Include="Locale\korean.xml" />
     <Content Include="Locale\spanish.xml" />
     <Content Include="Locale\swedish.xml" />
+    <Content Include="PreviewImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
