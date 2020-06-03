@@ -29,13 +29,14 @@ namespace Painter
         private Color32 copyPasteColor;
         internal ushort BuildingID;
         internal bool IsPanelVisible;
+        internal bool isPickerOpen;
         private string CopyText => RepaintMod.Translation.GetTranslation("PAINTER-COPY");
         private string PasteText => RepaintMod.Translation.GetTranslation("PAINTER-PASTE");
         private string ResetText => RepaintMod.Translation.GetTranslation("PAINTER-RESET");
                 
         private void Update()
         {
-            if (!IsPanelVisible) return;
+            if (!isPickerOpen) return;
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand)) && Input.GetKeyDown(KeyCode.C))
                 copyPasteColor = GetColor();
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand)) && Input.GetKeyDown(KeyCode.V))
@@ -146,7 +147,8 @@ namespace Painter
             cF.size = new Vector2(26f, 26f);
             cF.pickerPosition = UIColorField.ColorPickerPosition.RightBelow;
             cF.eventSelectedColorChanged += EventSelectedColorChangedHandler;
-            cF.eventColorPickerOpen += EventColorPickerOpenHandler;            
+            cF.eventColorPickerOpen += EventColorPickerOpenHandler;
+            cF.eventColorPickerClose += EventColorPickerCloseHandler;
             return cF;
         }
 
@@ -178,6 +180,9 @@ namespace Painter
 
         private void EventColorPickerOpenHandler(UIColorField colorField, UIColorPicker colorPicker, ref bool overridden)
         {
+            // Set visibility flag.
+            isPickerOpen = true;
+
             colorPicker.component.height += 30f;
             copyButton = CreateButton(colorPicker.component, "Copy");
             pasteButton = CreateButton(colorPicker.component, "Paste");
@@ -197,7 +202,21 @@ namespace Painter
             {
                 EraseColor();
             };
-        }        
+        }
+
+
+        /// <summary>
+        /// Called when color picker is closed.
+        /// </summary>
+        /// <param name="colorField">Ignored</param>
+        /// <param name="colorPicker">Ignored</param>
+        /// <param name="overridden">Ignored</param>
+        private void EventColorPickerCloseHandler(UIColorField colorField, UIColorPicker colorPicker, ref bool overridden)
+        {
+            // Set visibility flag.
+            isPickerOpen = false;
+        }
+
     }
 
     public enum PanelType

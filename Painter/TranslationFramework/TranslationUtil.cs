@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
-using ColossalFramework;
-using ColossalFramework.Globalization;
 using ColossalFramework.Plugins;
 using ICities;
+
 
 namespace Painter.TranslationFramework
 {
@@ -34,7 +32,7 @@ namespace Painter.TranslationFramework
 
                     }
                 }
-                throw new Exception("Failed to find 'Painter' assembly!");
+                throw new Exception("Repaint: failed to find assembly!");
             }
         }
     }
