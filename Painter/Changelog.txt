@@ -1,0 +1,16 @@
+- Update bundled CitiesHarmony to 1.0.5
+
+Version 1.0.2
+
+- Copy and paste keystrokes now only recognised when color picker is open
+
+
+Version 1.0.1
+
+- Adjust colour icon position on service building panels
+- Added Korean translations by  TwotoolusFLY BAUST 
+
+
+Version 1.0
+
+- Migrate to Harmony 2.0
