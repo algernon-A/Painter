@@ -1,3 +1,5 @@
+Version 1.0.2
+
 - Copy and paste keystrokes now only recognised when color picker is open
 
 

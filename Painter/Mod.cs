@@ -8,7 +8,7 @@ namespace Painter
     public class RepaintMod : IUserMod
     {
         public string Name => "Repaint " + Version;
-        public static string Version => "1.0.1";
+        public static string Version => "1.0.2";
         public string Description => Translation.GetTranslation("PAINTER-DESCRIPTION");
         public static Translation Translation = new Translation();
 
