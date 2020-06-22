@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language UniqueName="ru" ReadableName="Russian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Translations>
+    <Translation ID="PAINTER-DESCRIPTION" String="Позволяет изменять цвет здания в игре." />
+    <Translation ID="PAINTER-RESET" String="Отменить" />
+    <Translation ID="PAINTER-COPY" String="Копир-ть" />
+    <Translation ID="PAINTER-PASTE" String="Вставить" />
+    <Translation ID="PAINTER-COLORIZE" String="Покрасить" />
+    <Translation ID="PAINTER-INVERT" String="Инвертир-ть" />
+    <Translation ID="PAINTER-RELOAD-REQUIRED" String="Эта опция требует перезапуска игры." />
+  </Translations>
+</Language>
