@@ -1,67 +1,110 @@
 ﻿using System;
 using UnityEngine;
 
+
 namespace Repaint
 {
-	public static class Extensions
+	/// <summary>
+	/// Extensions for colorizer functionality.
+	/// </summary>
+	internal static class Extensions
 	{
-		public static Texture2D MakeReadable(this Texture texture)
-		{
-			RenderTexture temporary = RenderTexture.GetTemporary(texture.width, texture.height, 0);
-			Graphics.Blit(texture, temporary);
-			Texture2D result = temporary.ToTexture2D();
-			RenderTexture.ReleaseTemporary(temporary);
-			return result;
-		}
-
-		public static Texture2D ToTexture2D(this RenderTexture rt)
-		{
-			RenderTexture active = RenderTexture.active;
-			RenderTexture.active = rt;
-			Texture2D texture2D = new Texture2D(rt.width, rt.height);
-			texture2D.ReadPixels(new Rect(0f, 0f, rt.width, rt.height), 0, 0);
-			texture2D.Apply();
-			RenderTexture.active = active;
-			return texture2D;
-		}
-
-		public static void UpdateACI(this Material material, bool invert)
+		/// <summary>
+		/// Colorizes/inverts a material's ACI.
+		/// </summary>
+		/// <param name="material">Material to convert</param>
+		/// <param name="invert">True if inverting, false otherwise</param>
+		internal static void UpdateACI(this Material material, bool invert)
 		{
 			try
 			{
-				Texture2D texture2D = material.GetTexture("_ACIMap").MakeReadable();
-				Texture2D texture2D2 = material.GetTexture("_XYSMap").MakeReadable();
-				Color[] pixels = texture2D.GetPixels();
-				Color[] pixels2 = texture2D2.GetPixels();
+				// Convert material textures to 2D.
+				Texture2D texture2dACI = material.GetTexture("_ACIMap").MakeReadable();
+				Color[] pixelsACI = texture2dACI.GetPixels();
+				Color[] pixelsXYS = material.GetTexture("_XYSMap").MakeReadable().GetPixels();
+
+				// Invert colormap.
 				if (invert)
 				{
-					for (int i = 0; i < pixels.Length; i++)
+					// Iterate through each pixel and invet
+					for (int i = 0; i < pixelsACI.Length; i++)
 					{
-						float num = Mathf.GammaToLinearSpace(pixels[i].g);
-						float num2 = Mathf.GammaToLinearSpace(pixels2[i].b);
-						float g = 1f - Mathf.LinearToGammaSpace(num * num2);
-						pixels[i] = new Color(pixels[i].r, g, pixels[i].b);
+						// Convert gamma values to linear and invert.
+						float linearACT = Mathf.GammaToLinearSpace(pixelsACI[i].g);
+						float linearXYS = Mathf.GammaToLinearSpace(pixelsXYS[i].b);
+						float g = 1f - Mathf.LinearToGammaSpace(linearACT * linearXYS);
+
+						// Apply our new color.
+						pixelsACI[i] = new Color(pixelsACI[i].r, g, pixelsACI[i].b);
 					}
 				}
 				else
 				{
-					for (int j = 0; j < pixels.Length; j++)
+					// Non-inverted colorization - iterate through each pixel and apply.
+					for (int j = 0; j < pixelsACI.Length; j++)
 					{
-						float g2 = Mathf.LinearToGammaSpace(1f - Mathf.GammaToLinearSpace(pixels2[j].b));
-						pixels[j] = new Color(pixels[j].r, g2, pixels[j].b);
+						// Convert gamma values to linear and apply new color.
+						float g2 = Mathf.LinearToGammaSpace(1f - Mathf.GammaToLinearSpace(pixelsXYS[j].b));
+						pixelsACI[j] = new Color(pixelsACI[j].r, g2, pixelsACI[j].b);
 					}
 				}
-				Texture2D texture2D3 = new Texture2D(texture2D.width, texture2D.height, texture2D.format, mipmap: true);
-				texture2D3.SetPixels(pixels);
-				texture2D3.Apply();
-				texture2D3.Compress(highQuality: true);
-				material.SetTexture("_ACIMap", texture2D3);
-				UnityEngine.Object.Destroy(texture2D);
+
+				// Create new 2D texture from our result and apply to prefab's ACI map.
+				Texture2D newTexture = new Texture2D(texture2dACI.width, texture2dACI.height, texture2dACI.format, mipmap: true);
+				newTexture.SetPixels(pixelsACI);
+				newTexture.Apply();
+				newTexture.Compress(highQuality: true);
+				material.SetTexture("_ACIMap", newTexture);
+
+				// Destroy our temporary texture.
+				UnityEngine.Object.Destroy(texture2dACI);
 			}
 			catch (Exception message)
 			{
+				// Don't let a failure stop us.
 				Debug.LogWarning(message);
 			}
+		}
+
+
+		/// <summary>
+		/// Converts a texture to Texture2D.
+		/// </summary>
+		/// <param name="texture">Texture to convert</param>
+		/// <returns>Converted 2D texture</returns>
+		private static Texture2D MakeReadable(this Texture texture)
+		{
+			// Create new temporary texture from given texture.
+			RenderTexture temporary = RenderTexture.GetTemporary(texture.width, texture.height, 0);
+			Graphics.Blit(texture, temporary);
+
+			// Convert to 2D texture and release temporary texture.
+			Texture2D result = temporary.ToTexture2D();
+			RenderTexture.ReleaseTemporary(temporary);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Convert a RenderTexture to 2D texture.
+		/// </summary>
+		/// <param name="renderTexture">RenderTexture to convert</param>
+		/// <returns>Converted 2D texture</returns>
+		private static Texture2D ToTexture2D(this RenderTexture renderTexture)
+		{
+			// Backup currently active texture.
+			RenderTexture activeTexture = RenderTexture.active;
+
+			// Set active render texture to current texture and copy to new 2D texture.
+			RenderTexture.active = renderTexture;
+			Texture2D texture2D = new Texture2D(renderTexture.width, renderTexture.height);
+			texture2D.ReadPixels(new Rect(0f, 0f, renderTexture.width, renderTexture.height), 0, 0);
+			texture2D.Apply();
+
+			// Restore previously active texture.
+			RenderTexture.active = activeTexture;
+
+			return texture2D;
 		}
 	}
 }

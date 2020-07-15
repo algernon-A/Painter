@@ -16,7 +16,7 @@ Version 1.0.2
 Version 1.0.1
 
 - Adjust colour icon position on service building panels
-- Added Korean translations by  TwotoolusFLY BAUST 
+- Added Korean translations by TwotoolusFLY BAUST 
 
 
 Version 1.0

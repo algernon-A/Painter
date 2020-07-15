@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Language UniqueName="en" ReadableName="English" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Translations>    
+  <Translations>
     <Translation ID="PAINTER-DESCRIPTION" String="Lets you change building colors in-game." />
     <Translation ID="PAINTER-RESET" String="Erase" />
     <Translation ID="PAINTER-COPY" String="Copy" />
     <Translation ID="PAINTER-PASTE" String="Paste" />
+    <Translation ID="PAINTER-COLORIZE" String="Colorize" />
+    <Translation ID="PAINTER-INVERT" String="Invert" />
+    <Translation ID="PAINTER-RELOAD-REQUIRED" String="This option requires re-starting the game." />
   </Translations>
 </Language>

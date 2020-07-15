@@ -73,7 +73,7 @@
     <Compile Include="Colorizer.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Loading.cs" />
-    <Compile Include="Painter.cs" />
+    <Compile Include="Repaint.cs" />
     <Compile Include="Patches\CommonBuildingAI.cs" />
     <Compile Include="Patches\InfoPanelSetTarget.cs" />
     <Compile Include="Patches\InitPrefab.cs" />
