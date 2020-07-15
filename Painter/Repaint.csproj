@@ -8,7 +8,7 @@
     <ProjectGuid>{EAC62096-A3B5-4819-84D4-A8DA712984EE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Painter</RootNamespace>
+    <RootNamespace>Repaint</RootNamespace>
     <AssemblyName>Painter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -69,12 +69,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorEntry.cs" />
+    <Compile Include="PainterData\ColorEntry.cs" />
+    <Compile Include="Colorizer.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Loading.cs" />
     <Compile Include="Painter.cs" />
-    <Compile Include="Patcher.cs" />
-    <Compile Include="Patches.cs" />
-    <Compile Include="SerializableColor.cs" />
+    <Compile Include="Patches\CommonBuildingAI.cs" />
+    <Compile Include="Patches\InfoPanelSetTarget.cs" />
+    <Compile Include="Patches\InitPrefab.cs" />
+    <Compile Include="Patches\Patcher.cs" />
+    <Compile Include="Patches\InfoPanelHide.cs" />
+    <Compile Include="PainterData\SerializableColor.cs" />
     <Compile Include="SerializableData.cs" />
     <Compile Include="TranslationFramework\Language.cs" />
     <Compile Include="TranslationFramework\TranslatableAttribute.cs" />

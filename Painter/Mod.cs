@@ -1,9 +1,9 @@
 ﻿using ICities;
 using CitiesHarmony.API;
-using Painter.TranslationFramework;
+using Repaint.TranslationFramework;
 
 
-namespace Painter
+namespace Repaint
 {
     public class RepaintMod : IUserMod
     {

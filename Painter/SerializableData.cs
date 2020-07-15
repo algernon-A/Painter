@@ -1,59 +1,69 @@
-﻿using ICities;
+﻿using ColossalFramework;
+using ICities;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Painter;
 
-namespace Painter
+namespace Repaint
 {
+	public class SerializableDataExtension : SerializableDataExtensionBase
+	{
+		private static readonly string m_dataID = "PAINTER_COLOR_DATA";
 
-    public class SerializableDataExtension : SerializableDataExtensionBase
-    {
-        private Painter Instance => Painter.instance;
-        private static readonly string m_dataID = "PAINTER_COLOR_DATA";
+		private Repaint Instance => Singleton<Repaint>.instance;
 
-        private List<ColorEntry> ColorData
-        {
-            get
-            {
-                var list = new List<ColorEntry>();
-                if (Instance.Colors != null)
-                    foreach (var item in Instance.Colors)
-                        list.Add(item);
-                return list;
-            }
-            set
-            {
-                var collection = new Dictionary<ushort, SerializableColor>();
-                if (value != null)
-                    foreach (var item in value)
-                        collection.Add(item.Key, item.Value);
-                Instance.Colors = collection;
-            }
-        }
+		private List<ColorEntry> ColorData
+		{
+			get
+			{
+				List<ColorEntry> list = new List<ColorEntry>();
+				if (Instance.Colors != null)
+				{
+					foreach (KeyValuePair<ushort, SerializableColor> color in Instance.Colors)
+					{
+						list.Add(color);
+					}
+					return list;
+				}
+				return list;
+			}
+			set
+			{
+				Dictionary<ushort, SerializableColor> dictionary = new Dictionary<ushort, SerializableColor>();
+				if (value != null)
+				{
+					foreach (ColorEntry item in value)
+					{
+						dictionary.Add(item.Key, item.Value);
+					}
+				}
+				Instance.Colors = dictionary;
+			}
+		}
 
+		public override void OnSaveData()
+		{
+			base.OnSaveData();
+			using (MemoryStream memoryStream = new MemoryStream())
+			{
+				new BinaryFormatter().Serialize(memoryStream, ColorData);
+				base.serializableDataManager.SaveData(m_dataID, memoryStream.ToArray());
+			}
+		}
 
-        public override void OnSaveData()
-        {
-            base.OnSaveData();
-            
-            using (var memoryStream = new MemoryStream())
-            {
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, ColorData);
-                serializableDataManager.SaveData(m_dataID, memoryStream.ToArray());
-            }
-        }
-
-        public override void OnLoadData()
-        {
-            base.OnLoadData();            
-            var data = serializableDataManager.LoadData(m_dataID);
-            if (data == null || data.Length == 0) return;
-            var binaryFormatter = new BinaryFormatter();
-            using (var memoryStream = new MemoryStream(data))
-            {
-                ColorData = binaryFormatter.Deserialize(memoryStream) as List<ColorEntry>;
-            }
-        }
-    }
+		public override void OnLoadData()
+		{
+			base.OnLoadData();
+			byte[] array = base.serializableDataManager.LoadData(m_dataID);
+			if (array != null && array.Length != 0)
+			{
+				BinaryFormatter binaryFormatter = new BinaryFormatter();
+				using (MemoryStream serializationStream = new MemoryStream(array))
+				{
+					ColorData = (binaryFormatter.Deserialize(serializationStream) as List<ColorEntry>);
+				}
+			}
+		}
+	}
 }

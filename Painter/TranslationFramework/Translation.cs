@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using ColossalFramework.Globalization;
 
-namespace Painter.TranslationFramework
+namespace Repaint.TranslationFramework
 {
     public delegate void LanguageChangedEventHandler(string languageIdentifier);
 

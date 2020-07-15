@@ -4,7 +4,7 @@ using ColossalFramework.Plugins;
 using ICities;
 
 
-namespace Painter.TranslationFramework
+namespace Repaint.TranslationFramework
 {
     public static class TranslationUtil
     {

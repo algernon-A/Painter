@@ -3,7 +3,7 @@ using HarmonyLib;
 using CitiesHarmony.API;
 
 
-namespace Painter
+namespace Repaint
 {
     /// <summary>
     /// Class to manage the mod's Harmony patches.

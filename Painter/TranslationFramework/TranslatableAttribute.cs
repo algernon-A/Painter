@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Painter.TranslationFramework
+namespace Repaint.TranslationFramework
 {
     /// <summary>
     /// Translates the specified field into the value denoted by the identifier

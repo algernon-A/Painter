@@ -1,12 +1,70 @@
-﻿using ColossalFramework;
+﻿using System;
+using ColossalFramework;
 using ColossalFramework.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using Painter;
 
-namespace Painter
+
+namespace Repaint
 {
-    public class Painter : Singleton<Painter>
+    public class Repaint : Singleton<Repaint>
     {
+        internal void Colorize(BuildingInfo building, bool invert)
+        {
+            try
+            {
+                building.GetComponent<Renderer>().material.UpdateACI(invert);
+                building.m_lodObject.GetComponent<Renderer>().material.UpdateACI(invert);
+                BuildingInfo.MeshInfo[] subMeshes = building.m_subMeshes;
+                foreach (BuildingInfo.MeshInfo meshInfo in subMeshes)
+                {
+                    try
+                    {
+                        meshInfo.m_subInfo.GetComponent<Renderer>().material.UpdateACI(invert);
+                        meshInfo.m_subInfo.m_lodObject.GetComponent<Renderer>().material.UpdateACI(invert);
+                    }
+                    catch (Exception message)
+                    {
+                        Debug.LogWarning(message);
+                    }
+                }
+            }
+            catch (Exception message2)
+            {
+                Debug.LogWarning(message2);
+            }
+        }
+
+        public PainterColorizer Colorizer
+        {
+            get
+            {
+                if (colorizer == null)
+                {
+                    colorizer = PainterColorizer.Load();
+                    if (colorizer == null)
+                    {
+                        colorizer = new PainterColorizer();
+                        colorizer.Save();
+                    }
+                }
+                return colorizer;
+            }
+            set
+            {
+                colorizer = value;
+            }
+        }
+        private PainterColorizer colorizer;
+        private UICheckBox colorizeCheckbox;
+        private UICheckBox invertCheckbox;
+        private string ColorizeText => RepaintMod.Translation.GetTranslation("PAINTER-COLORIZE");
+        private string InvertText => RepaintMod.Translation.GetTranslation("PAINTER-INVERT");
+        private string ReloadRequiredTooltip => RepaintMod.Translation.GetTranslation("PAINTER-RELOAD-REQUIRED");
+
+
+
         private Dictionary<ushort, SerializableColor> colors;
         internal Dictionary<ushort, SerializableColor> Colors
         {
@@ -180,6 +238,17 @@ namespace Painter
 
         private void EventColorPickerOpenHandler(UIColorField colorField, UIColorPicker colorPicker, ref bool overridden)
         {
+            colorPicker.component.height += 60f;
+            if (colorizeCheckbox == null)
+            {
+                colorizeCheckbox = CreateCheckBox(colorPicker.component, "Colorize");
+            }
+            if (invertCheckbox == null)
+            {
+                invertCheckbox = CreateCheckBox(colorPicker.component, "Invert");
+            }
+
+
             // Set visibility flag.
             isPickerOpen = true;
 
@@ -190,6 +259,10 @@ namespace Painter
             copyButton.relativePosition = new Vector3(10f, 223f);
             pasteButton.relativePosition = new Vector3(91.33333333333333f, 223f);
             resetButton.relativePosition = new Vector3(172.6666666666667f, 223f);
+
+            colorizeCheckbox.relativePosition = new Vector3(10f, 253f);
+            invertCheckbox.relativePosition = new Vector3(127f, 253f);
+
             copyButton.eventClick += (c, e) =>
             {
                 copyPasteColor = GetColor();
@@ -215,6 +288,33 @@ namespace Painter
         {
             // Set visibility flag.
             isPickerOpen = false;
+        }
+
+
+
+        public UICheckBox CreateCheckBox(UIComponent parent, string fieldName)
+        {
+            UICheckBox uICheckBox = parent.AddUIComponent<UICheckBox>();
+            uICheckBox.name = fieldName;
+            uICheckBox.width = 20f;
+            uICheckBox.height = 20f;
+            uICheckBox.relativePosition = Vector3.zero;
+            UILabel uILabel = uICheckBox.AddUIComponent<UILabel>();
+            uILabel.text = ((fieldName == "Colorize") ? ColorizeText : InvertText);
+            uILabel.textScale = 0.8f;
+            uILabel.relativePosition = new Vector3(22f, 5f);
+            UISprite uISprite = uICheckBox.AddUIComponent<UISprite>();
+            uISprite.spriteName = "ToggleBase";
+            uISprite.size = new Vector2(16f, 16f);
+            uISprite.relativePosition = new Vector3(2f, 2f);
+            uICheckBox.checkedBoxObject = uISprite.AddUIComponent<UISprite>();
+            ((UISprite)uICheckBox.checkedBoxObject).spriteName = "ToggleBaseFocused";
+            uICheckBox.checkedBoxObject.size = new Vector2(16f, 16f);
+            uICheckBox.checkedBoxObject.relativePosition = Vector3.zero;
+            string name = Singleton<BuildingManager>.instance.m_buildings.m_buffer[BuildingID].Info.name;
+            uICheckBox.isChecked = ((fieldName == "Colorize") ? Colorizer.Colorized.Contains(name) : Colorizer.Inverted.Contains(name));
+            uICheckBox.tooltip = ReloadRequiredTooltip;
+            return uICheckBox;
         }
 
     }
