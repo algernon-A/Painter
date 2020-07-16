@@ -1,15 +1,15 @@
 ﻿using ICities;
 using CitiesHarmony.API;
-using Repaint.TranslationFramework;
 
 
 namespace Repaint
 {
     public class RepaintMod : IUserMod
     {
-        public string Name => "Repaint " + Version;
+        public static string ModName => "Repaint ";
         public static string Version => "1.1";
-        public string Description => Translation.GetTranslation("PAINTER-DESCRIPTION");
+        public string Name => ModName + " " + Version;
+        public string Description => Translations.Translate("PAINTER-DESCRIPTION");
         public static Translation Translation = new Translation();
 
         public void OnEnabled()

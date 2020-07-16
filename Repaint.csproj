@@ -69,35 +69,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PainterData\ColorEntry.cs" />
-    <Compile Include="Colorizer.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Loading.cs" />
-    <Compile Include="Repaint.cs" />
-    <Compile Include="Patches\CommonBuildingAI.cs" />
-    <Compile Include="Patches\InfoPanelSetTarget.cs" />
-    <Compile Include="Patches\InitPrefab.cs" />
-    <Compile Include="Patches\Patcher.cs" />
-    <Compile Include="Patches\InfoPanelHide.cs" />
-    <Compile Include="PainterData\SerializableColor.cs" />
-    <Compile Include="SerializableData.cs" />
-    <Compile Include="TranslationFramework\Language.cs" />
-    <Compile Include="TranslationFramework\TranslatableAttribute.cs" />
-    <Compile Include="TranslationFramework\Translation.cs" />
-    <Compile Include="TranslationFramework\TranslationUtil.cs" />
-    <Compile Include="Mod.cs" />
+    <Compile Include="Code\Debugging.cs" />
+    <Compile Include="Code\PainterData\ColorEntry.cs" />
+    <Compile Include="Code\Colorizer.cs" />
+    <Compile Include="Code\Extensions.cs" />
+    <Compile Include="Code\Loading.cs" />
+    <Compile Include="Code\Repaint.cs" />
+    <Compile Include="Code\Patches\CommonBuildingAI.cs" />
+    <Compile Include="Code\Patches\InfoPanelSetTarget.cs" />
+    <Compile Include="Code\Patches\InitPrefab.cs" />
+    <Compile Include="Code\Patches\Patcher.cs" />
+    <Compile Include="Code\Patches\InfoPanelHide.cs" />
+    <Compile Include="Code\PainterData\SerializableColor.cs" />
+    <Compile Include="Code\SerializableData.cs" />
+    <Compile Include="Code\TranslationFramework\TranslationFramework.cs" />
+    <Compile Include="Code\Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Code\TranslationFramework\TranslationXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt" />
-    <Content Include="Locale\dutch.xml" />
-    <Content Include="Locale\english.xml" />
-    <Content Include="Locale\french.xml" />
-    <Content Include="Locale\italian.xml" />
-    <Content Include="Locale\korean.xml" />
-    <Content Include="Locale\russian.xml" />
-    <Content Include="Locale\spanish.xml" />
-    <Content Include="Locale\swedish.xml" />
+    <Content Include="Translations\dutch.xml" />
+    <Content Include="Translations\english.xml" />
+    <Content Include="Translations\french.xml" />
+    <Content Include="Translations\italian.xml" />
+    <Content Include="Translations\korean.xml" />
+    <Content Include="Translations\russian.xml" />
+    <Content Include="Translations\spanish.xml" />
+    <Content Include="Translations\swedish.xml" />
     <Content Include="PreviewImage.png" />
   </ItemGroup>
   <ItemGroup>
@@ -105,12 +104,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(SolutionName)"
-del "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(SolutionName)\$(TargetFileName)"
-xcopy /y "$(TargetPath)" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(SolutionName)"
-mkdir "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(SolutionName)\Locale"
-xcopy /y "$(ProjectDir)\Locale" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(SolutionName)\Locale" /s /e
-xcopy /y "$(SolutionDir)packages\CitiesHarmony.API.1.0.5\lib\net35\CitiesHarmony.API.dll" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(SolutionName)" 
+    <PostBuildEvent>mkdir "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
+del "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\$(TargetFileName)"
+xcopy /y "$(TargetPath)" "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
+del "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\CitiesHarmony.API.dll"
+xcopy /y "$(SolutionDir)packages\CitiesHarmony.API.1.0.5\lib\net35\CitiesHarmony.API.dll" "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
+mkdir "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations"
+del "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations\*.xml"
+xcopy /y "$(SolutionDir)\Translations\" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\Translations" /s /e
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

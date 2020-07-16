@@ -46,17 +46,6 @@ namespace Repaint
         internal bool isPickerOpen;
 
 
-        // UI translations - base functionality.
-        private string CopyText => RepaintMod.Translation.GetTranslation("PAINTER-COPY");
-        private string PasteText => RepaintMod.Translation.GetTranslation("PAINTER-PASTE");
-        private string ResetText => RepaintMod.Translation.GetTranslation("PAINTER-RESET");
-
-        // UI translations - colorizer.
-        private string ColorizeText => RepaintMod.Translation.GetTranslation("PAINTER-COLORIZE");
-        private string InvertText => RepaintMod.Translation.GetTranslation("PAINTER-INVERT");
-        private string ReloadRequiredTooltip => RepaintMod.Translation.GetTranslation("PAINTER-RELOAD-REQUIRED");
-
-
         /// <summary>
         /// Dictionary of building colour settings.
         /// Key mod data record.
@@ -398,14 +387,14 @@ namespace Repaint
             colorPicker.component.height += 60f;
 
             // Create copy, paste, and reset buttons.
-            copyButton = CreateButton(colorPicker.component, CopyText, 10f);
-            pasteButton = CreateButton(colorPicker.component, PasteText, 91.33333333333333f);
-            resetButton = CreateButton(colorPicker.component, ResetText, 172.6666666666667f);
+            copyButton = CreateButton(colorPicker.component, Translations.Translate("PAINTER-COPY"), 10f);
+            pasteButton = CreateButton(colorPicker.component, Translations.Translate("PAINTER-PASTE"), 91.33333333333333f);
+            resetButton = CreateButton(colorPicker.component, Translations.Translate("PAINTER-RESET"), 172.6666666666667f);
 
             // Create colorize and invert checkboxes.
             string prefabName = Singleton<BuildingManager>.instance.m_buildings.m_buffer[BuildingID].Info.name;
-            colorizeCheckbox = CreateCheckBox(colorPicker.component, ColorizeText, 10f, Colorizer.Colorized.Contains(prefabName));
-            invertCheckbox = CreateCheckBox(colorPicker.component, InvertText, 127f, Colorizer.Inverted.Contains(prefabName));
+            colorizeCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-COLORIZE"), 10f, Colorizer.Colorized.Contains(prefabName));
+            invertCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-INVERT"), 127f, Colorizer.Inverted.Contains(prefabName));
 
             // Set visibility flag.
             isPickerOpen = true;
@@ -572,7 +561,7 @@ namespace Repaint
             checkBox.isChecked = isChecked;
 
             // Tooltip.
-            checkBox.tooltip = ReloadRequiredTooltip;
+            checkBox.tooltip = Translations.Translate("PAINTER-RELOAD-REQUIRED");
 
             return checkBox;
         }
