@@ -116,16 +116,25 @@ namespace Repaint
                 BuildingInfo.MeshInfo[] subMeshes = building.m_subMeshes;
                 foreach (BuildingInfo.MeshInfo meshInfo in subMeshes)
                 {
-                    try
+                    // Just in case.
+                    if (meshInfo?.m_subInfo != null)
                     {
-                        // Apply ACI changes to submesh and LOD.
-                        meshInfo.m_subInfo.GetComponent<Renderer>().material.UpdateACI(invert);
-                        meshInfo.m_subInfo.m_lodObject.GetComponent<Renderer>().material.UpdateACI(invert);
-                    }
-                    catch (Exception message)
-                    {
-                        // Don't let a single failure stop the whole process.
-                        Debug.LogWarning(message);
+                        try
+                        {
+                            // Apply ACI changes to submesh and LOD.
+                            meshInfo.m_subInfo.GetComponent<Renderer>().material.UpdateACI(invert);
+
+                            // Beware of missing lods, e.g. due to transparency LOD fix.
+                            if (meshInfo.m_subInfo.m_lodObject != null)
+                            {
+                                meshInfo.m_subInfo.m_lodObject.GetComponent<Renderer>().material.UpdateACI(invert);
+                            }
+                        }
+                        catch (Exception message)
+                        {
+                            // Don't let a single failure stop the whole process.
+                            Debug.LogWarning(message);
+                        }
                     }
                 }
             }
