@@ -435,9 +435,9 @@ namespace Repaint
             invertCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-INVERT"), 127f, Colorizer.Inverted.Contains(prefabName));
 
             // Create RGB textfields.
-            redField = CreateTextField(colorPicker.component, "R:", Column1X + TextFieldOffset, "PAINTER-RED");
-            greenField = CreateTextField(colorPicker.component, "G:", Column2X + TextFieldOffset, "PAINTER-GREEN");
-            blueField = CreateTextField(colorPicker.component, "B:", Column3X + TextFieldOffset, "PAINTER-BLUE");
+            redField = CreateTextField(colorPicker.component, "PAINTER-R", Column1X + TextFieldOffset, "PAINTER-RED");
+            greenField = CreateTextField(colorPicker.component, "PAINTER-G", Column2X + TextFieldOffset, "PAINTER-GREEN");
+            blueField = CreateTextField(colorPicker.component, "PAINTER-B", Column3X + TextFieldOffset, "PAINTER-BLUE");
 
             // Record current colors - we use these to avoid cumulative rounding and adjusment errors that can occur when using the color picker color directly.
             currentRed = colorPicker.color.r;
@@ -720,11 +720,11 @@ namespace Repaint
         /// Creates a textfield with label to the left.
         /// </summary>
         /// <param name="parent">Parent component</param>
-        /// <param name="text">Textfield text label</param>
+        /// <param name="textKey">Textfield text label translation key</param>
         /// <param name="xPos">Text relative X position</param>
         /// <param name="toolTipKey">Tooltip translation key</param>
         /// <returns>New checkbox</returns>
-        private UITextField CreateTextField(UIComponent parent, string text, float xPos, string toolTipKey)
+        private UITextField CreateTextField(UIComponent parent, string textKey, float xPos, string toolTipKey)
         {
             const float TextFieldHeight = 16f;
 
@@ -757,7 +757,7 @@ namespace Repaint
             // Label.
             UILabel label = textField.AddUIComponent<UILabel>();
             label.textScale = 0.8f;
-            label.text = text;
+            label.text = Translations.Translate(textKey);
             label.autoSize = true;
             label.verticalAlignment = UIVerticalAlignment.Middle;
             label.wordWrap = true;

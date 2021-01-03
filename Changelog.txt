@@ -1,3 +1,6 @@
+Version 1.2
+
+- Add numeric RGB entry
 - Add check for missing LODs when colorizing buildings
 
 
