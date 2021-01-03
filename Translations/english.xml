@@ -8,5 +8,8 @@
     <Translation ID="PAINTER-COLORIZE" String="Colorize" />
     <Translation ID="PAINTER-INVERT" String="Invert" />
     <Translation ID="PAINTER-RELOAD-REQUIRED" String="This option requires re-starting the game." />
+    <Translation ID="PAINTER-RED" String="RGB color red component (zero to one)" />
+    <Translation ID="PAINTER-GREEN" String="RGB color green component (zero to one)" />
+    <Translation ID="PAINTER-BLUE" String="RGB color blue component (zero to one)" />
   </Translations>
 </Language>
