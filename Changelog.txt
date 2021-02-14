@@ -1,3 +1,8 @@
+Version 1.2.1
+
+- Add explicit null check to UpdateACI
+
+
 Version 1.2
 
 - Add numeric RGB entry

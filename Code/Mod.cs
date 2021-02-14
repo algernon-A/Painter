@@ -7,7 +7,7 @@ namespace Repaint
     public class RepaintMod : IUserMod
     {
         public static string ModName => "Repaint ";
-        public static string Version => "1.2";
+        public static string Version => "1.2.1";
         public string Name => ModName + " " + Version;
         public string Description => Translations.Translate("PAINTER-DESCRIPTION");
         public static Translation Translation = new Translation();
