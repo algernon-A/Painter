@@ -19,7 +19,14 @@ namespace Repaint
 			try
 			{
 				// Convert material textures to 2D.
-				Texture2D texture2dACI = material.GetTexture("_ACIMap").MakeReadable();
+				Texture2D texture2dACI = material.GetTexture("_ACIMap")?.MakeReadable();
+
+				// Null check in case things failed.
+				if (texture2dACI == null)
+                {
+					Debugging.Message("couldn't get readable ACIMap");
+                }
+
 				Color[] pixelsACI = texture2dACI.GetPixels();
 				Color[] pixelsXYS = material.GetTexture("_XYSMap").MakeReadable().GetPixels();
 
@@ -76,6 +83,13 @@ namespace Repaint
 		{
 			// Create new temporary texture from given texture.
 			RenderTexture temporary = RenderTexture.GetTemporary(texture.width, texture.height, 0);
+
+			// Null check in case things failed.
+			if (temporary == null)
+			{
+				return null;
+			}
+
 			Graphics.Blit(texture, temporary);
 
 			// Convert to 2D texture and release temporary texture.
