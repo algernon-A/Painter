@@ -20,15 +20,23 @@ namespace Repaint
 			{
 				// Convert material textures to 2D.
 				Texture2D texture2dACI = material.GetTexture("_ACIMap")?.MakeReadable();
+				Color[] pixelsACI = texture2dACI?.GetPixels();
 
 				// Null check in case things failed.
-				if (texture2dACI == null)
+				if (pixelsACI == null)
                 {
 					Debugging.Message("couldn't get readable ACIMap");
+					return;
                 }
 
-				Color[] pixelsACI = texture2dACI.GetPixels();
-				Color[] pixelsXYS = material.GetTexture("_XYSMap").MakeReadable().GetPixels();
+				Color[] pixelsXYS = material.GetTexture("_XYSMap")?.MakeReadable()?.GetPixels();
+
+				// Null check in case things failed again.
+				if (pixelsXYS == null)
+                {
+					Debugging.Message("couldn't get readable XYS map");
+					return;
+                }
 
 				// Invert colormap.
 				if (invert)
@@ -81,6 +89,12 @@ namespace Repaint
 		/// <returns>Converted 2D texture</returns>
 		private static Texture2D MakeReadable(this Texture texture)
 		{
+			// Null check.
+			if (texture == null)
+            {
+				return null;
+            }
+
 			// Create new temporary texture from given texture.
 			RenderTexture temporary = RenderTexture.GetTemporary(texture.width, texture.height, 0);
 

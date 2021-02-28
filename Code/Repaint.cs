@@ -112,6 +112,40 @@ namespace Repaint
 
 
         /// <summary>
+        /// Unity update method to check and handle keystroke inputs for the color picker when it's open.
+        /// </summary>
+        public void Update()
+        {
+            // Only interested when the picker is open.
+            if (isPickerOpen)
+            {
+                // Check for appropriate modifier keys.
+                if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand))
+                {
+                    // Copy key.
+                    if (Input.GetKeyDown(KeyCode.C))
+                    {
+                        // Copy the current colour selection.
+                        copyPasteColor = GetColor();
+                    }
+                    // Paste key.
+                    else if (Input.GetKeyDown(KeyCode.V))
+                    {
+                        // Paste the copied colour.
+                        PasteColor();
+                    }
+                    // Erase key.
+                    if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
+                    {
+                        // Erase custom colour setting.
+                        EraseColor();
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Colorizes or inverts a building.
         /// Part of the colorization function.
         /// </summary>
@@ -193,40 +227,6 @@ namespace Repaint
                 [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component),
                 [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component),
             };
-        }
-
-
-        /// <summary>
-        /// Unity update method to check and handle keystroke inputs for the color picker when it's open.
-        /// </summary>
-        private void Update()
-        {
-            // Only interested when the picker is open.
-            if (isPickerOpen)
-            {
-                // Check for appropriate modifier keys.
-                if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand))
-                {
-                    // Copy key.
-                    if (Input.GetKeyDown(KeyCode.C))
-                    {
-                        // Copy the current colour selection.
-                        copyPasteColor = GetColor();
-                    }
-                    // Paste key.
-                    else if (Input.GetKeyDown(KeyCode.V))
-                    {
-                        // Paste the copied colour.
-                        PasteColor();
-                    }
-                    // Erase key.
-                    if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
-                    {
-                        // Erase custom colour setting.
-                        EraseColor();
-                    }
-                }
-            }
         }
 
 
