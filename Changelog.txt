@@ -3,6 +3,7 @@ Version 1.2.2
 - Add explict null check for missing XYS textures
 - Update translation framework
 - Update logging framework
+- Update UI control framework
 
 
 Version 1.2.1
