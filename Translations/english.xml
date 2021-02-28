@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Language UniqueName="en" ReadableName="English" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Language UniqueName="en" ReadableName="English">
   <Translations>
     <Translation ID="PAINTER-DESCRIPTION" String="Lets you change building colors in-game." />
     <Translation ID="PAINTER-RESET" String="Erase" />

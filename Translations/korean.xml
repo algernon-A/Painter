@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Language UniqueName="ko" ReadableName="Korean" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Language UniqueName="ko" ReadableName="Korean">
   <Translations>
     <Translation ID="PAINTER-DESCRIPTION" String="게임 내 건물들의 색상을 변경해보세요." />
     <Translation ID="PAINTER-RESET" String="초기화" />

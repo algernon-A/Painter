@@ -7,12 +7,12 @@ namespace Repaint
     /// Harmony patch for WorldInfoPanel.OnHide to toggle visibility of Repaint color panel.
     /// </summary>
     [HarmonyPatch(typeof(WorldInfoPanel), "OnHide")]
-    class WorldInfoPanelPatch
+    public static class WorldInfoPanelPatch
     {
         /// <summary>
         /// Harmony Postfix patch to hide color panel when info panel is no longer visible.
         /// </summary>
-        static void Postfix(WorldInfoPanel __instance)
+        public static void Postfix(WorldInfoPanel __instance)
         {
             if (__instance is ZonedBuildingWorldInfoPanel || __instance is CityServiceWorldInfoPanel || __instance is ShelterWorldInfoPanel)
             {

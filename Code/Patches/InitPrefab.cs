@@ -10,14 +10,14 @@ namespace Repaint
 	/// Harmony Prefix patch to BuildingInfo.InitializePrefab to apply building colorization on load.
 	/// </summary>
 	[HarmonyPatch(typeof(BuildingInfo), "InitializePrefab")]
-	internal static class ColorizePatch
+	public static class ColorizePatch
 	{
 		/// <summary>
 		/// Harmony Prefix patch to apply building colorization to prefabs as they are initialised.
 		/// </summary>
 		/// <param name="__instance">Instance reference</param>
 		/// <returns>Always true (doesn't pre-empt original method)</returns>
-		private static bool Prefix(BuildingInfo __instance)
+		public static bool Prefix(BuildingInfo __instance)
 		{
 			// See if this building is in our lists.
 			if (Singleton<Repaint>.instance.Colorizer.Colorized.Contains(__instance.name))

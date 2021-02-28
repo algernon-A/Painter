@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Language UniqueName="ru" ReadableName="Russian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Language UniqueName="ru" ReadableName="Russian">
   <Translations>
     <Translation ID="PAINTER-DESCRIPTION" String="Позволяет изменять цвет здания в игре." />
     <Translation ID="PAINTER-RESET" String="Отменить" />

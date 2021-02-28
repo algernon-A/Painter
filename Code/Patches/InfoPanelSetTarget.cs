@@ -9,13 +9,13 @@ namespace Repaint
     /// Harmony patch for ShelterWorldInfoPanel.OnSetTarget to show the the color field and set it to the current building's settings.
     /// </summary>
     [HarmonyPatch(typeof(ShelterWorldInfoPanel), "OnSetTarget")]
-    class ShelterWorldInfoPanelPatchTarget
+    public static class ShelterWorldInfoPanelPatchTarget
     {
         /// <summary>
         /// Harmony Postfix patch to show color field and set to current building's settings.
         /// </summary>
         /// <param name="__instance">Panel instance</param>
-        static void Postfix(ShelterWorldInfoPanel __instance)
+        public static void Postfix(ShelterWorldInfoPanel __instance)
         {
             // Show panel.
             Repaint.instance.IsPanelVisible = true;
@@ -31,13 +31,13 @@ namespace Repaint
     /// Harmony patch for ShelterWorldInfoPanel.OnSetTarget to show the the color field and set it to the current building's settings.
     /// </summary>
     [HarmonyPatch(typeof(CityServiceWorldInfoPanel), "OnSetTarget")]
-    class CityServiceWorldInfoPanelPatchTarget
+    public static class CityServiceWorldInfoPanelPatchTarget
     {
         /// <summary>
         /// Harmony Postfix patch to show color field and set to current building's settings.
         /// </summary>
         /// <param name="__instance">Panel instance</param>
-        static void Postfix(CityServiceWorldInfoPanel __instance)
+        public static void Postfix(CityServiceWorldInfoPanel __instance)
         {
             // Show panel.
             Repaint.instance.IsPanelVisible = true;
@@ -53,13 +53,13 @@ namespace Repaint
     /// Harmony patch for ShelterWorldInfoPanel.OnSetTarget to show the the color field and set it to the current building's settings.
     /// </summary>
     [HarmonyPatch(typeof(ZonedBuildingWorldInfoPanel), "OnSetTarget")]
-    class ZonedBuildingWorldInfoPanelPatchTarget
+    public static class ZonedBuildingWorldInfoPanelPatchTarget
     {
         /// <summary>
         /// Harmony Postfix patch to show color field and set to current building's settings.
         /// </summary>
         /// <param name="__instance">Panel instance</param>
-        static void Postfix(ZonedBuildingWorldInfoPanel __instance)
+        public static void Postfix(ZonedBuildingWorldInfoPanel __instance)
         {
             // Show panel.
             Repaint.instance.IsPanelVisible = true;

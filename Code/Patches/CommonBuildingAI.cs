@@ -9,7 +9,7 @@ namespace Repaint
     /// Harmony patch for CommonBuildingAI.GetColor to apply custom colour settings to buildings.
     /// </summary>
     [HarmonyPatch(typeof(CommonBuildingAI), "GetColor")]
-    class CommonBuildingAIPatch
+    public static class CommonBuildingAIPatch
     {
         /// <summary>
         /// Harmony Prefix patch to apply custom colours to building.
@@ -18,7 +18,7 @@ namespace Repaint
         /// <param name="buildingID">Building instance ID</param>
         /// <param name="infoMode">InfoManager info mode</param>
         /// <returns>False (stop execution chain) if a custom colour is applied, true (continue on to original method) otherwise</returns>
-        static bool Prefix(ref Color __result, ushort buildingID, InfoManager.InfoMode infoMode)
+        public static bool Prefix(ref Color __result, ushort buildingID, InfoManager.InfoMode infoMode)
         {
             // Don't do anything if we're in a special info mode.
             if (infoMode == InfoManager.InfoMode.None)

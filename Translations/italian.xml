@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Language UniqueName="it" ReadableName="Italiano" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Language UniqueName="it" ReadableName="Italiano">
   <Translations>
     <Translation ID="PAINTER-DESCRIPTION" String="Permette dipingere gli immobili direttamente dentro al gioco." />
     <Translation ID="PAINTER-RESET" String="Cancella" />
