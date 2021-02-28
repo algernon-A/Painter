@@ -431,8 +431,10 @@ namespace Repaint
 
             // Create colorize and invert checkboxes.
             string prefabName = Singleton<BuildingManager>.instance.m_buildings.m_buffer[BuildingID].Info.name;
-            colorizeCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-COLORIZE"), 10f, Colorizer.Colorized.Contains(prefabName));
-            invertCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-INVERT"), 127f, Colorizer.Inverted.Contains(prefabName));
+            colorizeCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-COLORIZE"), 10f);
+            invertCheckbox = CreateCheckBox(colorPicker.component, Translations.Translate("PAINTER-INVERT"), 127f);
+            colorizeCheckbox.isChecked = Colorizer.Colorized.Contains(prefabName);
+            invertCheckbox.isChecked = Colorizer.Inverted.Contains(prefabName);
 
             // Create RGB textfields.
             redField = CreateTextField(colorPicker.component, "PAINTER-R", Column1X + TextFieldOffset, "PAINTER-RED");
@@ -646,31 +648,7 @@ namespace Repaint
         /// <param name="text">Button text label</param>
         /// <param name="xPos">Button relative X position</param>
         /// <returns>New pushbutton</returns>
-        private UIButton CreateButton(UIComponent parent, string text, float xPos)
-        {
-            // Basic setup.
-            UIButton button = parent.AddUIComponent<UIButton>();
-            button.width = ButtonWidth;
-            button.height = 20f;
-            button.relativePosition = new Vector3(xPos, ButtonY);
-
-            // Button text.
-            button.textScale = 0.8f;
-            button.textPadding = new RectOffset(0, 0, 5, 0);
-            button.horizontalAlignment = UIHorizontalAlignment.Center;
-            button.textVerticalAlignment = UIVerticalAlignment.Middle;
-            button.text = text;
-
-            // Button sprites.
-            button.atlas = UIView.GetAView().defaultAtlas;
-            button.normalBgSprite = "ButtonMenu";
-            button.disabledBgSprite = "ButtonMenuDisabled";
-            button.hoveredBgSprite = "ButtonMenuHovered";
-            button.focusedBgSprite = "ButtonMenu";
-            button.pressedBgSprite = "ButtonMenuPressed";
-
-            return button;
-        }
+        private UIButton CreateButton(UIComponent parent, string text, float xPos) => UIControls.AddButton(parent, xPos, ButtonY, text, ButtonWidth, 20f, 0.8f);
 
 
         /// <summary>
@@ -679,41 +657,8 @@ namespace Repaint
         /// <param name="parent">Parent component</param>
         /// <param name="text">Button text label</param>
         /// <param name="xPos">Button relative X position</param>
-        /// <param name="isChecked">Whether the button is initially checked or not</param>
         /// <returns>New checkbox</returns>
-        private UICheckBox CreateCheckBox(UIComponent parent, string text, float xPos, bool isChecked)
-        {
-            // Basic setup.
-            UICheckBox checkBox = parent.AddUIComponent<UICheckBox>();
-            checkBox.width = 20f;
-            checkBox.height = 20f;
-            checkBox.relativePosition = new Vector3(xPos, CheckBoxY);
-
-            // Checkbox text.
-            UILabel label = checkBox.AddUIComponent<UILabel>();
-            label.text = text;
-            label.textScale = 0.8f;
-            label.relativePosition = new Vector3(22f, 5f);
-
-            // Sprites.
-            UISprite sprite = checkBox.AddUIComponent<UISprite>();
-            sprite.spriteName = "ToggleBase";
-            sprite.size = new Vector2(16f, 16f);
-            sprite.relativePosition = new Vector3(2f, 2f);
-
-            checkBox.checkedBoxObject = sprite.AddUIComponent<UISprite>();
-            ((UISprite)checkBox.checkedBoxObject).spriteName = "ToggleBaseFocused";
-            checkBox.checkedBoxObject.size = new Vector2(16f, 16f);
-            checkBox.checkedBoxObject.relativePosition = Vector3.zero;
-
-            // Initial state.
-            checkBox.isChecked = isChecked;
-
-            // Tooltip.
-            checkBox.tooltip = Translations.Translate("PAINTER-RELOAD-REQUIRED");
-
-            return checkBox;
-        }
+        private UICheckBox CreateCheckBox(UIComponent parent, string text, float xPos) => UIControls.AddCheckBox(parent, xPos, CheckBoxY, text, tooltip: Translations.Translate("PAINTER-RELOAD-REQUIRED"));
 
 
         /// <summary>
@@ -724,49 +669,6 @@ namespace Repaint
         /// <param name="xPos">Text relative X position</param>
         /// <param name="toolTipKey">Tooltip translation key</param>
         /// <returns>New checkbox</returns>
-        private UITextField CreateTextField(UIComponent parent, string textKey, float xPos, string toolTipKey)
-        {
-            const float TextFieldHeight = 16f;
-
-            UITextField textField = parent.AddUIComponent<UITextField>();
-
-            // Size and position.
-            textField.relativePosition = new Vector2(xPos, TextFieldY);
-            textField.size = new Vector2(50f, TextFieldHeight);
-            textField.textScale = 0.8f;
-
-            // Appearance.
-            textField.selectionSprite = "EmptySprite";
-            textField.selectionBackgroundColor = new Color32(0, 172, 234, 255);
-            textField.normalBgSprite = "TextFieldPanelHovered";
-            textField.disabledBgSprite = "TextFieldPanel";
-            textField.textColor = new Color32(0, 0, 0, 255);
-            textField.disabledTextColor = new Color32(0, 0, 0, 128);
-            textField.color = new Color32(255, 255, 255, 255);
-
-            // Text layout.
-            textField.padding = new RectOffset(3, 3, 3, 3);
-            textField.horizontalAlignment = UIHorizontalAlignment.Center;
-
-            // Behaviour.
-            textField.builtinKeyNavigation = true;
-            textField.isInteractive = true;
-            textField.readOnly = false;
-            textField.selectOnFocus = true;
-
-            // Label.
-            UILabel label = textField.AddUIComponent<UILabel>();
-            label.textScale = 0.8f;
-            label.text = Translations.Translate(textKey);
-            label.autoSize = true;
-            label.verticalAlignment = UIVerticalAlignment.Middle;
-            label.wordWrap = true;
-            label.relativePosition = new Vector2(-(label.width + 3f), ((TextFieldHeight - label.height) / 2) + 1.5f);
-
-            // Tooltip.
-            textField.tooltip = Translations.Translate(toolTipKey);
-
-            return textField;
-        }
+        private UITextField CreateTextField(UIComponent parent, string textKey, float xPos, string toolTipKey) => UIControls.LabelledTextField(parent, xPos, TextFieldY, Translations.Translate(textKey), 50f, 16f, 0.8f, 3, Translations.Translate(toolTipKey));
     }
 }

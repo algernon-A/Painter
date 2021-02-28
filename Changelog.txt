@@ -1,3 +1,8 @@
+- Add explict null check for missing XYS textures
+- Update translation framework
+- Update logging framework
+
+
 Version 1.2.1
 
 - Add explicit null check to UpdateACI
