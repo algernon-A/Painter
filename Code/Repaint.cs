@@ -329,7 +329,7 @@ namespace Repaint
                 UIComponent template = UITemplateManager.Get("LineTemplate");
                 if (template == null)
                 {
-                    Debugging.Message("failed to get LineTemplate");
+                    Logging.Message("failed to get LineTemplate");
                     return null;
                 }
 
@@ -337,7 +337,7 @@ namespace Repaint
                 colorFieldTemplate = template.Find<UIColorField>("LineColor");
                 if (colorFieldTemplate == null)
                 {
-                    Debugging.Message("failed to get LineColor template");
+                    Logging.Message("failed to get LineColor template");
                     return null;
                 }
             }

@@ -3,9 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using ICities;
 using ColossalFramework;
-using ColossalFramework.Plugins;
 using ColossalFramework.Globalization;
 
 
@@ -94,8 +92,8 @@ namespace Repaint
     public class Translator
     {
         private Language systemLanguage = null;
-        private SortedList<string, Language> languages;
-        private string defaultLanguage = "en";
+        private readonly SortedList<string, Language> languages;
+        private readonly string defaultLanguage = "en";
         private int currentIndex = -1;
 
 
@@ -117,9 +115,11 @@ namespace Repaint
         /// </summary>
         public void UpdateUILanguage()
         {
-            Debugging.Message("setting language to " + (currentIndex < 0 ? "system" : languages.Values[currentIndex].uniqueName));
+            Logging.Message("setting language to ", currentIndex < 0 ? "system" : languages.Values[currentIndex].uniqueName);
 
             // UI update code goes here.
+
+            // TOOO:  Add dynamic UI update.
         }
 
 
@@ -191,20 +191,28 @@ namespace Repaint
                 // Check that the current key is included in the translation.
                 if (currentLanguage.translationDictionary.ContainsKey(key))
                 {
-                    // All good!  Return translation.
-                    return currentLanguage.translationDictionary[key];
+                    string translation = currentLanguage.translationDictionary[key];
+
+                    if (!string.IsNullOrEmpty(translation))
+                    {
+                        // All good!  Return translation.
+                        return currentLanguage.translationDictionary[key];
+                    }
+
+                    // If we got here, there's a null key.
+                    Logging.Error("null or empty shortened fallback translation for key ", key);
                 }
                 else
                 {
-                    Debugging.Message("no translation for language " + currentLanguage.uniqueName + " found for key " + key);
-
-                    // Attempt fallack translation.
-                    return FallbackTranslation(currentLanguage.uniqueName, key);
+                    Logging.Message("no translation for language ", currentLanguage.uniqueName, " found for key " + key);
                 }
+
+                // Attempt fallack translation.
+                return FallbackTranslation(currentLanguage.uniqueName, key);
             }
             else
             {
-                Debugging.Message("no current language when translating key " + key);
+                Logging.Error("no current language when translating key ", key);
             }
 
             // If we've made it this far, something went wrong; just return the key.
@@ -253,7 +261,7 @@ namespace Repaint
                 catch (Exception e)
                 {
                     // Don't really care.
-                    Debugging.LogException(e);
+                    Logging.LogException(e, "exception setting system language");
                 }
             }
 
@@ -314,8 +322,16 @@ namespace Repaint
                     Language fallbackLanguage = languages[newName];
                     if (fallbackLanguage.translationDictionary.ContainsKey(key))
                     {
-                        // All good!  Return translation.
-                        return fallbackLanguage.translationDictionary[key];
+                        string fallback = fallbackLanguage.translationDictionary[key];
+
+                        if (!string.IsNullOrEmpty(fallback))
+                        {
+                            // All good!  Return translation.
+                            return fallback;
+                        }
+
+                        // If we got here, there's a null key.
+                        Logging.Error("null or empty shortened fallback translation for key ", key);
                     }
                 }
             }
@@ -325,8 +341,16 @@ namespace Repaint
             {
                 if (systemLanguage.translationDictionary.ContainsKey(key))
                 {
-                    // All good!  Return translation.
-                    return systemLanguage.translationDictionary[key];
+                    string fallback = systemLanguage.translationDictionary[key];
+
+                    if (!string.IsNullOrEmpty(fallback))
+                    {
+                        // All good!  Return translation.
+                        return fallback;
+                    }
+
+                    // If we got here, there's a null key.
+                    Logging.Error("null or empty system fallback translation for key ", key);
                 }
             }
 
@@ -334,12 +358,21 @@ namespace Repaint
             try
             {
                 Language fallbackLanguage = languages[defaultLanguage];
-                return fallbackLanguage.translationDictionary[key];
+                string fallback = fallbackLanguage.translationDictionary.ContainsKey(key) ? fallbackLanguage.translationDictionary[key] : null;
+
+                if (!string.IsNullOrEmpty(fallback))
+                {
+                    // All good!  Return translation.
+                    return fallback;
+                }
+
+                // If we got here, there's a null key.
+                Logging.Error("null or empty default fallback translation for key ", key);
             }
             catch (Exception e)
             {
                 // Don't care.  Just log the exception, as we really should have a default language.
-                Debugging.LogException(e);
+                Logging.LogException(e, "exception attempting fallback translation");
             }
 
             // At this point we've failed; just return the key.
@@ -356,7 +389,7 @@ namespace Repaint
             languages.Clear();
 
             // Get the current assembly path and append our locale directory name.
-            string assemblyPath = GetAssemblyPath();
+            string assemblyPath = ModUtils.GetAssemblyPath();
             if (!assemblyPath.IsNullOrWhiteSpace())
             {
                 string localePath = Path.Combine(assemblyPath, "Translations");
@@ -378,56 +411,20 @@ namespace Repaint
                             }
                             else
                             {
-                                Debugging.Message("couldn't deserialize translation file '" + translationFile);
+                                Logging.Error("couldn't deserialize translation file '", translationFile);
                             }
                         }
                     }
                 }
                 else
                 {
-                    Debugging.Message("translations directory not found");
+                    Logging.Error("translations directory not found");
                 }
             }
             else
             {
-                Debugging.Message("assembly path was empty");
+                Logging.Error("assembly path was empty");
             }
-        }
-
-
-        /// <summary>
-        /// Returns the filepath of the mod assembly.
-        /// </summary>
-        /// <returns>Mod assembly filepath</returns>
-        private string GetAssemblyPath()
-        {
-            // Get list of currently active plugins.
-            IEnumerable<PluginManager.PluginInfo> plugins = PluginManager.instance.GetPluginsInfo();
-
-            // Iterate through list.
-            foreach (PluginManager.PluginInfo plugin in plugins)
-            {
-                try
-                {
-                    // Get all (if any) mod instances from this plugin.
-                    IUserMod[] mods = plugin.GetInstances<IUserMod>();
-
-                    // Check to see if the primary instance is this mod.
-                    if (mods.FirstOrDefault() is RepaintMod)
-                    {
-                        // Found it! Return path.
-                        return plugin.modPath;
-                    }
-                }
-                catch
-                {
-                    // Don't care.
-                }
-            }
-
-            // If we got here, then we didn't find the assembly.
-            Debugging.Message("assembly path not found");
-            throw new FileNotFoundException(RepaintMod.ModName + ": assembly path not found!");
         }
     }
 }

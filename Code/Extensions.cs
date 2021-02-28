@@ -25,7 +25,7 @@ namespace Repaint
 				// Null check in case things failed.
 				if (pixelsACI == null)
                 {
-					Debugging.Message("couldn't get readable ACIMap");
+					Logging.Message("couldn't get readable ACIMap");
 					return;
                 }
 
@@ -34,7 +34,7 @@ namespace Repaint
 				// Null check in case things failed again.
 				if (pixelsXYS == null)
                 {
-					Debugging.Message("couldn't get readable XYS map");
+					Logging.Message("couldn't get readable XYS map");
 					return;
                 }
 

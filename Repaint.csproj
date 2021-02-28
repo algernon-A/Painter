@@ -69,7 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Debugging.cs" />
+    <Compile Include="Code\Logging.cs" />
+    <Compile Include="Code\Utils\ModUtils.cs" />
     <Compile Include="Code\PainterData\ColorEntry.cs" />
     <Compile Include="Code\Colorizer.cs" />
     <Compile Include="Code\Extensions.cs" />
