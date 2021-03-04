@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Language UniqueName="ru" ReadableName="Russian">
+<Language UniqueName="ru" ReadableName="Русский">
   <Translations>
     <Translation ID="PAINTER-DESCRIPTION" String="Позволяет изменять цвет здания в игре." />
     <Translation ID="PAINTER-RESET" String="Отменить" />
@@ -8,5 +8,11 @@
     <Translation ID="PAINTER-COLORIZE" String="Покрасить" />
     <Translation ID="PAINTER-INVERT" String="Инвертир-ть" />
     <Translation ID="PAINTER-RELOAD-REQUIRED" String="Эта опция требует перезапуска игры." />
+    <Translation ID="PAINTER-R" String="R:" />
+    <Translation ID="PAINTER-G" String="G:" />
+    <Translation ID="PAINTER-B" String="B:" />
+    <Translation ID="PAINTER-RED" String="Красный компонент цвета RGB (от нуля до единицы)" />
+    <Translation ID="PAINTER-GREEN" String="Зелёный компонент цвета RGB (от нуля до единицы) " />
+    <Translation ID="PAINTER-BLUE" String="Синий компонент цвета RGB (от нуля до единицы)" />
   </Translations>
 </Language>
