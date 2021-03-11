@@ -20,6 +20,7 @@ namespace Repaint
         Zoned,
         Warehouse,
         Stadium,
+        VarsityStadium,
         Count
     }
 
@@ -221,7 +222,8 @@ namespace Repaint
                 [PanelType.Shelter] = UIView.library.Get<ShelterWorldInfoPanel>(typeof(ShelterWorldInfoPanel).Name),
                 [PanelType.Zoned] = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name),
                 [PanelType.Warehouse] = UIView.library.Get<WarehouseWorldInfoPanel>(typeof(WarehouseWorldInfoPanel).Name),
-                [PanelType.Stadium] = UIView.library.Get<FootballPanel>(typeof(FootballPanel).Name)
+                [PanelType.Stadium] = UIView.library.Get<FootballPanel>(typeof(FootballPanel).Name),
+                [PanelType.VarsityStadium] = UIView.library.Get<VarsitySportsArenaPanel>(typeof(VarsitySportsArenaPanel).Name)
             };
 
             // Create new color field dictionary and populate with new color fields.
@@ -231,7 +233,8 @@ namespace Repaint
                 [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component),
                 [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component),
                 [PanelType.Warehouse] = CreateColorField(Panels[PanelType.Warehouse]?.component),
-                [PanelType.Stadium] = CreateColorField(Panels[PanelType.Stadium]?.component)
+                [PanelType.Stadium] = CreateColorField(Panels[PanelType.Stadium]?.component),
+                [PanelType.VarsityStadium] = CreateColorField(Panels[PanelType.VarsityStadium]?.component)
             };
         }
 
@@ -285,6 +288,7 @@ namespace Repaint
             Panels[PanelType.Shelter].component.isVisible ? ColorFields[PanelType.Shelter] :
             Panels[PanelType.Zoned].component.isVisible ? ColorFields[PanelType.Zoned] :
             Panels[PanelType.Warehouse].component.isVisible ? ColorFields[PanelType.Warehouse] :
+            Panels[PanelType.Stadium].component.isVisible ? ColorFields[PanelType.Stadium] :
             ColorFields[PanelType.Stadium];
 
 
@@ -369,12 +373,21 @@ namespace Repaint
 
             // Player info panels have wrappers, zoned ones don't.
             UIComponent wrapper = parent.Find("Wrapper");
+
             if (wrapper == null)
             {
                 problemsPanel = parent.Find("ProblemsPanel");
             }
             else
             {
+                // Varisty sports have ProblemsLayoutPanel in between wrapper and problemsPanel.
+                UIComponent problemsLayout = wrapper.Find("ProblemsLayoutPanel");
+
+                if (problemsLayout != null)
+                {
+                    wrapper = problemsLayout;
+                }
+
                 problemsPanel = wrapper.Find("ProblemsPanel");
             }
 
