@@ -18,6 +18,8 @@ namespace Repaint
         Service,
         Shelter,
         Zoned,
+        Warehouse,
+        Stadium,
         Count
     }
 
@@ -217,7 +219,9 @@ namespace Repaint
             {
                 [PanelType.Service] = UIView.library.Get<CityServiceWorldInfoPanel>(typeof(CityServiceWorldInfoPanel).Name),
                 [PanelType.Shelter] = UIView.library.Get<ShelterWorldInfoPanel>(typeof(ShelterWorldInfoPanel).Name),
-                [PanelType.Zoned] = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name)
+                [PanelType.Zoned] = UIView.library.Get<ZonedBuildingWorldInfoPanel>(typeof(ZonedBuildingWorldInfoPanel).Name),
+                [PanelType.Warehouse] = UIView.library.Get<WarehouseWorldInfoPanel>(typeof(WarehouseWorldInfoPanel).Name),
+                [PanelType.Stadium] = UIView.library.Get<FootballPanel>(typeof(FootballPanel).Name)
             };
 
             // Create new color field dictionary and populate with new color fields.
@@ -226,6 +230,8 @@ namespace Repaint
                 [PanelType.Service] = CreateColorField(Panels[PanelType.Service]?.component),
                 [PanelType.Shelter] = CreateColorField(Panels[PanelType.Shelter]?.component),
                 [PanelType.Zoned] = CreateColorField(Panels[PanelType.Zoned]?.component),
+                [PanelType.Warehouse] = CreateColorField(Panels[PanelType.Warehouse]?.component),
+                [PanelType.Stadium] = CreateColorField(Panels[PanelType.Stadium]?.component)
             };
         }
 
@@ -272,12 +278,23 @@ namespace Repaint
 
 
         /// <summary>
+        /// Returns the currently displayed color field.
+        /// </summary>
+        private UIColorField CurrentColorField =>
+            Panels[PanelType.Service].component.isVisible ? ColorFields[PanelType.Service] :
+            Panels[PanelType.Shelter].component.isVisible ? ColorFields[PanelType.Shelter] :
+            Panels[PanelType.Zoned].component.isVisible ? ColorFields[PanelType.Zoned] :
+            Panels[PanelType.Warehouse].component.isVisible ? ColorFields[PanelType.Warehouse] :
+            ColorFields[PanelType.Stadium];
+
+
+        /// <summary>
         /// Erases the custom colour selection for a building, as directed by the user.
         /// </summary>
         private void EraseColor()
         {
             // Get the current color field.
-            UIColorField field = Panels[PanelType.Service].component.isVisible ? ColorFields[PanelType.Service] : Panels[PanelType.Shelter].component.isVisible ? ColorFields[PanelType.Shelter] : ColorFields[PanelType.Zoned];
+            UIColorField field = CurrentColorField;
 
             // Remove custom colour from building.
             ResetColor();
@@ -297,7 +314,7 @@ namespace Repaint
         private void PasteColor()
         {
             // Get the current color field.
-            UIColorField field = Panels[PanelType.Service].component.isVisible ? ColorFields[PanelType.Service] : Panels[PanelType.Shelter].component.isVisible ? ColorFields[PanelType.Shelter] : ColorFields[PanelType.Zoned];
+            UIColorField field = CurrentColorField;
 
             // Update building's colour to the copied value.
             UpdateColor(copyPasteColor, BuildingID);
