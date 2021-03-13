@@ -156,7 +156,7 @@ namespace Repaint
         /// <param name="invert">True to invert, false otherwise</param>
         internal void Colorize(BuildingInfo building, bool invert)
         {
-            if (building != null)
+            if (building?.name != null)
             {
                 try
                 {
@@ -182,18 +182,18 @@ namespace Repaint
                                 meshInfo.m_subInfo.GetComponent<Renderer>()?.material?.UpdateACI(invert);
                                 meshInfo.m_subInfo.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert);
                             }
-                            catch (Exception message)
+                            catch (Exception e)
                             {
                                 // Don't let a single failure stop the whole process.
-                                Debug.LogWarning(message);
+                                Logging.LogException(e, "exception colorizing sub-mesh for building ", building.name);
                             }
                         }
                     }
                 }
-                catch (Exception message2)
+                catch (Exception e)
                 {
                     // Don't let a single failure kill the mod.
-                    Debug.LogWarning(message2 + ":" + (building.name ?? "null prefab"));
+                    Logging.LogException(e, "exception colorizing building ", building.name);
                 }
             }
         }
@@ -402,7 +402,7 @@ namespace Repaint
             catch
             {
                 // Don't care; just use default relative Y.
-                Debug.Log("Repaint: couldn't find ProblemsPanel relative position.");
+                Logging.Error("couldn't find ProblemsPanel relative position");
             }
 
             // Set up the new color field.

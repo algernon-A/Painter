@@ -69,7 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Logging.cs" />
+    <Compile Include="Code\Utils\Logging.cs" />
     <Compile Include="Code\Utils\ModUtils.cs" />
     <Compile Include="Code\PainterData\ColorEntry.cs" />
     <Compile Include="Code\Colorizer.cs" />

@@ -29,7 +29,7 @@ namespace Repaint
                 if (HarmonyHelper.IsHarmonyInstalled)
                 {
                     // Create harmony instance.
-                    Debug.Log("Repaint v" + RepaintMod.Version + ": deploying Harmony patches.");
+                    Logging.KeyMessage("deploying Harmony patches");
 
                     // Apply all annotated patches and update flag.
                     Harmony harmonyInstance = new Harmony(harmonyID);
@@ -38,7 +38,7 @@ namespace Repaint
                 }
                 else
                 {
-                    Debug.Log("Repaint: Harmony not ready.");
+                    Logging.Error("Harmony not ready");
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace Repaint
             // Only unapply if patches appplied.
             if (patched)
             {
-                Debug.Log("Repaint: reverting Harmony patches.");
+                Logging.KeyMessage("reverting Harmony patches");
 
                 // Unapply patches, but only with our HarmonyID.
                 Harmony harmonyInstance = new Harmony(harmonyID);

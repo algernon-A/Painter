@@ -74,10 +74,10 @@ namespace Repaint
 				// Destroy our temporary texture.
 				UnityEngine.Object.Destroy(texture2dACI);
 			}
-			catch (Exception message)
+			catch (Exception e)
 			{
 				// Don't let a failure stop us.
-				Debug.LogWarning(message);
+				Logging.LogException(e, "exception updating ACI");
 			}
 		}
 

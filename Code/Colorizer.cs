@@ -59,7 +59,7 @@ namespace Repaint
 			}
 			catch (Exception e)
 			{
-				Debug.Log(e.Message);
+				Logging.LogException(e, "exception loading colorizer configuration file");
 
 				// If failed, return a new (empty) colorizer.
 				return new PainterColorizer();

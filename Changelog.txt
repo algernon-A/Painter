@@ -1,6 +1,7 @@
 - Add support for Industries DLC Warehouses, Match Day Stadiums, and Campus DLC Stadiums
 - Extend colorization to sub-buildings
 - Add colorization for buildings with custom renderers
+- Updated logging
 
 
 Version 1.2.2
