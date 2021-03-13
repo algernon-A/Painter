@@ -156,42 +156,45 @@ namespace Repaint
         /// <param name="invert">True to invert, false otherwise</param>
         internal void Colorize(BuildingInfo building, bool invert)
         {
-            try
+            if (building != null)
             {
-                // Apply ACI changes to main mesh and LOD.
-                building.GetComponent<Renderer>().material.UpdateACI(invert);
-                building.m_lodObject.GetComponent<Renderer>().material.UpdateACI(invert);
-
-                // Iterate through submeshes and apply settings as well.
-                BuildingInfo.MeshInfo[] subMeshes = building.m_subMeshes;
-                foreach (BuildingInfo.MeshInfo meshInfo in subMeshes)
+                try
                 {
-                    // Just in case.
-                    if (meshInfo?.m_subInfo != null)
-                    {
-                        try
-                        {
-                            // Apply ACI changes to submesh and LOD.
-                            meshInfo.m_subInfo.GetComponent<Renderer>().material.UpdateACI(invert);
+                    // Apply ACI changes to main mesh and LOD, where they exist.
+                    building.GetComponent<Renderer>()?.material?.UpdateACI(invert);
+                    building.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert);
+                    building.m_overrideMainRenderer?.material?.UpdateACI(invert);
 
-                            // Beware of missing lods, e.g. due to transparency LOD fix.
-                            if (meshInfo.m_subInfo.m_lodObject != null)
-                            {
-                                meshInfo.m_subInfo.m_lodObject.GetComponent<Renderer>().material.UpdateACI(invert);
-                            }
-                        }
-                        catch (Exception message)
+                    // Ditto for buildings with custom renderers.
+                    building.m_overrideMainRenderer?.material?.UpdateACI(invert);
+                    building.m_lodMaterial?.UpdateACI(invert);
+
+                    // Iterate through submeshes and apply settings as well.
+                    BuildingInfo.MeshInfo[] subMeshes = building.m_subMeshes;
+                    foreach (BuildingInfo.MeshInfo meshInfo in subMeshes)
+                    {
+                        // Just in case.
+                        if (meshInfo?.m_subInfo != null)
                         {
-                            // Don't let a single failure stop the whole process.
-                            Debug.LogWarning(message);
+                            try
+                            {
+                                // Apply ACI changes to main mesh and LOD, where they exist.
+                                meshInfo.m_subInfo.GetComponent<Renderer>()?.material?.UpdateACI(invert);
+                                meshInfo.m_subInfo.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert);
+                            }
+                            catch (Exception message)
+                            {
+                                // Don't let a single failure stop the whole process.
+                                Debug.LogWarning(message);
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception message2)
-            {
-                // Don't let a single failure kill the mod.
-                Debug.LogWarning(message2);
+                catch (Exception message2)
+                {
+                    // Don't let a single failure kill the mod.
+                    Debug.LogWarning(message2 + ":" + (building.name ?? "null prefab"));
+                }
             }
         }
 
@@ -570,18 +573,47 @@ namespace Repaint
         /// <summary>
         /// Handles colorized/inverted checkbox state changes, adding/removing entries from lists as appropriate.
         /// </summary>
-        /// <param name="list">List of prefabs</param>
+        /// <param name="list">Relevant list of prefabs</param>
         /// <param name="isChecked">Checkbox state</param>
         private void HandleCheckboxes(List<string> list, bool isChecked)
         {
-            // Get name of current building.
-            string buildingName = Singleton<BuildingManager>.instance.m_buildings.m_buffer[BuildingID].Info.name;
+            // Local references.
+            BuildingInfo prefab = Singleton<BuildingManager>.instance.m_buildings.m_buffer[BuildingID].Info;
+            string buildingName = prefab.name;
+            BuildingInfo.SubInfo[] subBuildings = prefab.m_subBuildings;
 
+            // Add/remove main building to relevant list.
+            ColorizeListEntry(buildingName, list, isChecked);
+
+            // Sub-buildings.
+            if (subBuildings != null && subBuildings.Length > 0)
+            {
+                foreach (BuildingInfo.SubInfo subBuilding in subBuildings)
+                {
+                    buildingName = subBuilding?.m_buildingInfo?.name;
+                    if (buildingName != null)
+                    {
+                        ColorizeListEntry(buildingName, list, isChecked);
+                    }
+                }
+            }
+        }
+
+
+
+        /// <summary>
+        /// Adds or removes a building from the provided colorization list.
+        /// </summary>
+        /// <param name="buildingName">Building name</param>
+        /// <param name="list">List to add to/remove from</param>
+        /// <param name="inList">True if the building should be in the list, false if it should be removed</param>
+        private void ColorizeListEntry(string buildingName, List<string> list, bool inList)
+        {
             // First, see if the given list contains the name of the current building.
             if (list.Contains(buildingName))
             {
                 // In list - if the checkbox is not checked, remove the entry.
-                if (!isChecked)
+                if (!inList)
                 {
                     list.RemoveAll((string building) => building == buildingName);
                 }
@@ -589,7 +621,7 @@ namespace Repaint
             else
             {
                 // Not in list - if the checkbox is checked, add the entry.
-                if (isChecked)
+                if (inList)
                 {
                     list.Add(buildingName);
                 }
