@@ -24,11 +24,29 @@ namespace Repaint
 			{
 				// Colorize building.
 				Singleton<Repaint>.instance.Colorize(__instance, invert: false);
+
+				// Colorize sub-buildings.
+				if (__instance.m_subBuildings != null && __instance.m_subBuildings.Length > 0)
+				{
+					foreach (BuildingInfo.SubInfo subInfo in __instance.m_subBuildings)
+					{
+						Singleton<Repaint>.instance.Colorize(subInfo.m_buildingInfo, invert: false);
+					}
+				}
 			}
 			else if (Singleton<Repaint>.instance.Colorizer.Inverted.Contains(__instance.name))
 			{
 				// Invert building.
 				Singleton<Repaint>.instance.Colorize(__instance, invert: true);
+
+				// Invert sub-buildings.
+				if (__instance.m_subBuildings != null && __instance.m_subBuildings.Length > 0)
+				{
+					foreach (BuildingInfo.SubInfo subInfo in __instance.m_subBuildings)
+					{
+						Singleton<Repaint>.instance.Colorize(subInfo.m_buildingInfo, invert: true);
+					}
+				}
 			}
 
 			// Always continue on to original method.

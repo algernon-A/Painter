@@ -14,7 +14,8 @@ namespace Repaint
 		/// </summary>
 		/// <param name="material">Material to convert</param>
 		/// <param name="invert">True if inverting, false otherwise</param>
-		internal static void UpdateACI(this Material material, bool invert)
+		/// <param name="isLod">True if this is a LOD ACI (in which case illumination map will also be cleared), false otherwise</param>
+		internal static void UpdateACI(this Material material, bool invert, bool isLod)
 		{
 			try
 			{
@@ -41,13 +42,13 @@ namespace Repaint
 				// Invert colormap.
 				if (invert)
 				{
-					// Iterate through each pixel and invet
+					// Iterate through each pixel and invert
 					for (int i = 0; i < pixelsACI.Length; i++)
 					{
 						// Convert gamma values to linear and invert.
-						float linearACT = Mathf.GammaToLinearSpace(pixelsACI[i].g);
+						float linearACI = Mathf.GammaToLinearSpace(pixelsACI[i].g);
 						float linearXYS = Mathf.GammaToLinearSpace(pixelsXYS[i].b);
-						float g = 1f - Mathf.LinearToGammaSpace(linearACT * linearXYS);
+						float g = 1f - Mathf.LinearToGammaSpace(linearACI * linearXYS);
 
 						// Apply our new color.
 						pixelsACI[i] = new Color(pixelsACI[i].r, g, pixelsACI[i].b);
@@ -56,11 +57,10 @@ namespace Repaint
 				else
 				{
 					// Non-inverted colorization - iterate through each pixel and apply.
-					for (int j = 0; j < pixelsACI.Length; j++)
+					for (int i = 0; i < pixelsACI.Length; i++)
 					{
-						// Convert gamma values to linear and apply new color.
-						float g2 = Mathf.LinearToGammaSpace(1f - Mathf.GammaToLinearSpace(pixelsXYS[j].b));
-						pixelsACI[j] = new Color(pixelsACI[j].r, g2, pixelsACI[j].b);
+						// Convert gamma values to linear and apply color map, clearing illumination map if LOD.
+						pixelsACI[i] = new Color(pixelsACI[i].r, 0f, isLod ? 0f : pixelsACI[i].b);
 					}
 				}
 
@@ -68,7 +68,7 @@ namespace Repaint
 				Texture2D newTexture = new Texture2D(texture2dACI.width, texture2dACI.height, texture2dACI.format, mipmap: true);
 				newTexture.SetPixels(pixelsACI);
 				newTexture.Apply();
-				newTexture.Compress(highQuality: true);
+				//newTexture.Compress(highQuality: true);
 				material.SetTexture("_ACIMap", newTexture);
 
 				// Destroy our temporary texture.

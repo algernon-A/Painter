@@ -161,13 +161,14 @@ namespace Repaint
                 try
                 {
                     // Apply ACI changes to main mesh and LOD, where they exist.
-                    building.GetComponent<Renderer>()?.material?.UpdateACI(invert);
-                    building.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert);
-                    building.m_overrideMainRenderer?.material?.UpdateACI(invert);
+                    building.GetComponent<Renderer>()?.material?.UpdateACI(invert, false);
+                    building.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert, true);
+                    building.m_overrideMainRenderer?.material?.UpdateACI(invert, false);
 
                     // Ditto for buildings with custom renderers.
-                    building.m_overrideMainRenderer?.material?.UpdateACI(invert);
-                    building.m_lodMaterial?.UpdateACI(invert);
+                    building.m_overrideMainRenderer?.material?.UpdateACI(invert, false);
+                    building.m_lodMaterial?.UpdateACI(invert, true);
+                    building.m_lodMaterialCombined?.UpdateACI(invert, true);
 
                     // Iterate through submeshes and apply settings as well.
                     BuildingInfo.MeshInfo[] subMeshes = building.m_subMeshes;
@@ -179,8 +180,8 @@ namespace Repaint
                             try
                             {
                                 // Apply ACI changes to main mesh and LOD, where they exist.
-                                meshInfo.m_subInfo.GetComponent<Renderer>()?.material?.UpdateACI(invert);
-                                meshInfo.m_subInfo.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert);
+                                meshInfo.m_subInfo.GetComponent<Renderer>()?.material?.UpdateACI(invert, false);
+                                meshInfo.m_subInfo.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert, true);
                             }
                             catch (Exception e)
                             {
