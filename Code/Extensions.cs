@@ -68,11 +68,7 @@ namespace Repaint
 				Texture2D newTexture = new Texture2D(texture2dACI.width, texture2dACI.height, texture2dACI.format, mipmap: true);
 				newTexture.SetPixels(pixelsACI);
 				newTexture.Apply();
-				//newTexture.Compress(highQuality: true);
 				material.SetTexture("_ACIMap", newTexture);
-
-				// Destroy our temporary texture.
-				UnityEngine.Object.Destroy(texture2dACI);
 			}
 			catch (Exception e)
 			{
