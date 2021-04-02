@@ -160,33 +160,34 @@ namespace Repaint
             {
                 try
                 {
-                    // Apply ACI changes to main mesh and LOD, where they exist.
+                    // Apply ACI changes to main mesh.
                     building.GetComponent<Renderer>()?.material?.UpdateACI(invert, false);
-                    building.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert, true);
-                    building.m_overrideMainRenderer?.material?.UpdateACI(invert, false);
 
                     // Ditto for buildings with custom renderers.
                     building.m_overrideMainRenderer?.material?.UpdateACI(invert, false);
-                    building.m_lodMaterial?.UpdateACI(invert, true);
-                    building.m_lodMaterialCombined?.UpdateACI(invert, true);
 
-                    // Iterate through submeshes and apply settings as well.
-                    BuildingInfo.MeshInfo[] subMeshes = building.m_subMeshes;
-                    foreach (BuildingInfo.MeshInfo meshInfo in subMeshes)
+                    // Ditto for LODs.
+                    building.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert, true);
+
+                    // Any submeshes?
+                    if (building.m_subMeshes != null && building.m_subMeshes.Length > 0)
                     {
-                        // Just in case.
-                        if (meshInfo?.m_subInfo != null)
+                        // Yes -iterate through each submeshe and apply settings as well.
+                        for (int i = 0; i < building.m_subMeshes.Length; i++)
                         {
-                            try
+                            if (building.m_subMeshes[i].m_subInfo is BuildingInfoSub subInfo)
                             {
-                                // Apply ACI changes to main mesh and LOD, where they exist.
-                                meshInfo.m_subInfo.GetComponent<Renderer>()?.material?.UpdateACI(invert, false);
-                                meshInfo.m_subInfo.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert, true);
-                            }
-                            catch (Exception e)
-                            {
-                                // Don't let a single failure stop the whole process.
-                                Logging.LogException(e, "exception colorizing sub-mesh for building ", building.name);
+                                try
+                                {
+                                    // Apply ACI changes to main mesh and LOD, where they exist.
+                                    subInfo.GetComponent<Renderer>()?.material?.UpdateACI(invert, false);
+                                    subInfo.m_lodObject?.GetComponent<Renderer>()?.material?.UpdateACI(invert, true);
+                                }
+                                catch (Exception e)
+                                {
+                                    // Don't let a single failure stop the whole process.
+                                    Logging.LogException(e, "exception colorizing sub-mesh for building ", building.name);
+                                }
                             }
                         }
                     }
