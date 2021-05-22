@@ -1,3 +1,6 @@
+- More graceful handling of missing configuration files
+
+
 Version 1.3
 
 - Add support for Industries DLC Warehouses, Match Day Stadiums, and Campus DLC Stadiums

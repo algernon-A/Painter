@@ -48,22 +48,25 @@ namespace Repaint
 		{
 			string path = configurationPath;
 
-			// Read file.
-			XmlSerializer xmlSerializer = new XmlSerializer(typeof(PainterColorizer));
-			try
+			// Read file if it exists.
+			if (File.Exists(configurationPath))
 			{
-				using (StreamReader textReader = new StreamReader(path))
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(PainterColorizer));
+				try
 				{
-					return xmlSerializer.Deserialize(textReader) as PainterColorizer;
+					using (StreamReader textReader = new StreamReader(path))
+					{
+						return xmlSerializer.Deserialize(textReader) as PainterColorizer;
+					}
+				}
+				catch (Exception e)
+				{
+					Logging.LogException(e, "exception loading colorizer configuration file");
 				}
 			}
-			catch (Exception e)
-			{
-				Logging.LogException(e, "exception loading colorizer configuration file");
 
-				// If failed, return a new (empty) colorizer.
-				return new PainterColorizer();
-			}
+			// If failed, return a new (empty) colorizer.
+			return new PainterColorizer();
 		}
 	}
 }
