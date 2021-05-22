@@ -344,6 +344,8 @@ namespace Repaint
         /// <returns>New color field</returns>
         private UIColorField CreateColorField(UIComponent parent)
         {
+            const float ColorFieldSize = 26f;
+
             // Component to position the field against.
             UIComponent problemsPanel;
 
@@ -399,7 +401,7 @@ namespace Repaint
             try
             {
                 // Position ColorField vertically in the middle of the problems panel.  If wrapper panel exists, we need to add its offset as well.
-                relativeY = (wrapper == null ? 0 : wrapper.relativePosition.y) + problemsPanel.relativePosition.y + ((problemsPanel.height - 26) / 2);
+                relativeY = (wrapper == null ? 0 : wrapper.relativePosition.y) + problemsPanel.relativePosition.y + ((problemsPanel.height - ColorFieldSize) / 2);
             }
             catch
             {
@@ -409,9 +411,9 @@ namespace Repaint
 
             // Set up the new color field.
             colorField.name = "RepaintColorField";
-            colorField.AlignTo(parent, UIAlignAnchor.TopRight);
-            colorField.relativePosition += new Vector3(-40f, relativeY, 0f);
-            colorField.size = new Vector2(26f, 26f);
+            colorField.AlignTo(parent, UIAlignAnchor.TopLeft);
+            colorField.relativePosition += new Vector3(parent.width - 40f - ColorFieldSize, relativeY, 0f);
+            colorField.size = new Vector2(ColorFieldSize, ColorFieldSize);
             colorField.pickerPosition = UIColorField.ColorPickerPosition.RightBelow;
 
             // Event handlers.

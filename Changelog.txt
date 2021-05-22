@@ -1,3 +1,4 @@
+- Fix color field positioning in info panels when using the UI Resolution mod.
 - More graceful handling of missing configuration files
 
 
